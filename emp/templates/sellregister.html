@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div style="text-align: center">
+  <div  class="container py-5">
+      
+   
+    <br>
+    <div class="d-flex justify-content-center">
+
+    <h2  style="color:blue;background-color:white;">Seller Registration</h2></div><br>
+    <div style="text-align: center">
+    <div  class="d-lg-flex justify-content-center" > 
+    <div style="max-width: 20rem">
+<form action="" method='post'>
+  {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text"></div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">confirm_password</label>
+        <input type="password" name="confirm_password" class="form-control" id="exampleInputPassword1">
+      </div>
+      
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">contact</label>
+        <input type="number" name="contact" class="form-control" id="exampleInputPassword1">
+      </div>
+    
+
+      
+
+
+    <button type="submit" name="seller_button" class="btn btn-primary">Submit</button>
+  </form>
+  </div></div>
+</div>
+</div></div>
+  {% endblock %}

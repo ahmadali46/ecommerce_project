@@ -1,0 +1,86 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+
+<div style="text-align: center">
+<h2 style="color: blue;">Seller Product</h2></div>
+<br>
+<div style="text-align: center">
+<!-- <div  class="container mg-3"> -->
+ <div  class="d-lg-flex justify-content-center" > 
+  <div style="max-width: 18rem">
+
+<br>
+    {% csrf_token %}
+
+    <form action="" method='post' enctype="multipart/form-data">
+     
+   <div class="row">
+      <div class="col">
+    {%     for fm in form %}
+        {% csrf_token %}
+        <div class="form-group mb-3">
+          {{fm.label_tag}}{{fm}}<small class="text-danger"
+            >{{fm.errors|striptags}}</small
+          >
+   
+        </div>
+        <br>
+        {% endfor %}
+      </div></div>
+        <button type="submit"  class="btn btn-primary" >submit
+        </button> 
+
+        <br>
+    
+  </div>
+    </div> 
+    </div>
+  </form>
+<br><br>
+<div class="container py-5">
+        <div class="row">
+          {% if get %} {% for gets in get %}
+        <div class="col">
+        <div class="card" style="width: 14rem;">
+        <img class="card-img-top" src="{{gets.image_upload.url}}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{ gets.title }}</h5>
+          <p class="card-text">{{ gets.description }}</p>
+          {% if gets.file %}
+  <p class="card-file"></p><a href="">{{ gets.file.url }}</a></p>
+  {% endif %}
+          <p class="card-text">Rs.<small class="fw-light text-decoration-line-through">{{gets.price}}</small> {{ gets.discounted_price }}</p>
+          
+          <a
+          href="{% url 'deleteproduct' gets.pk %}"
+          type="button"
+          value="Delete"
+          class="btn btn-primary"
+          >Delete</a
+        >
+        <a href="{% url 'editproduct' gets.pk %}" class="btn btn-primary">Edit</a>
+        </div>
+        </div>
+        <br>
+        </div>
+        {% endfor %}  {% endif %}
+        </div>
+      </div>
+ 
+
+{% if non_field_error %}
+{% for error  in non_field_error %}
+<p class="alert alert-danger my-3">{{error}}</p>
+{% endfor %}
+{% endif %}
+
+
+{% comment %} <script>
+  $(document).ready(function(){
+      $('input[name="pro_id"]').hide()
+    // jQuery methods go here...
+  
+  });
+</script>  {% endcomment %}
+
+{% endblock %}

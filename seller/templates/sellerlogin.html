@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}      
+
+{% load crispy_forms_tags %}
+
+<!--Login--> 
+<div style="text-align: center">
+<div  class="container py-5">
+    <div class="d-flex justify-content-center">
+    <h1 style =" background-color: black;color: white;">Seller Login</h1> </div><br>
+  <form method="POST">
+    {% csrf_token %}
+    {{ fam|crispy }}
+    <br>
+    <button class="btn btn-dark" type="submit">Login</button>
+    <br>
+  </form>
+  <br>
+  <p class="text-center">Don't have an account? click here for registration -> <a style="color: black;" href="{% url 'sellerregister' %}">Create an account</a>.</p>
+</div>
+</div>
+{% endblock %}

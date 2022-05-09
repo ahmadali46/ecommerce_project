@@ -1,0 +1,83 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div  class="container py-5">
+<form action="" method='post'>
+    {% csrf_token %}
+
+<div class="row">
+    {% for mobile in mobiles %}
+<div class="col">
+<div class="card" style="width: 14rem;">
+  <img class="card-img-top" src="{{mobile.image_upload.url}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title" >{{ mobile.title }}</h5>
+
+		<a href="{% url 'add_to_wishlist' mobile.pk %}" name="wishlist" class="btn btn-outline-primary" >add to wish</a>
+
+    <p class="card-text">{{ mobile.description }}</p>
+    {% if mobile.file %}
+ <p class="card-file"></p><a href="">{{ mobile.file.url }}</a></p>
+  {% endif %}
+     <p class="card-text">Rs.<small class="fw-light text-decoration-line-through">{{mobile.price}}</small> {{ mobile.discounted_price }}</p>
+     <div class ='row'>
+      <div class = 'col'>
+      <a href="#" class="btn btn-primary">BuyNow </a></div>
+      <div class = 'col'>
+        {% comment %} <form action="/add_to_cart">
+          <input type="hidden" name="pro_id" value="{{moblie.id}}"  id="pro_id">
+          <button type="submit" class="btn btn-primary">cart</button></div>
+        </form> {% endcomment %}
+
+        <input type="hidden" name="pro_id" value="{{mobile.id}}"  id="pro_id">
+        <a href='/add_to_cart/{{mobile.product_id}}' type="submit"  class="btn btn-primary">cart</a></div>
+</div>
+  </div>
+</div>
+<br>
+</div>
+{% endfor %}
+</div>
+<br>
+<br>
+
+<div class="row">
+{% for laptop in laptops %}
+<div class="col">
+<div class="card" style="width: 14rem;">
+  <img class="card-img-top" src="{{laptop.image_upload.url}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ laptop.title }}</h5>
+    <a href="{% url 'add_to_wishlist' laptop.pk %}" name="wishlist" class="btn btn-outline-primary" >add to wish</a>
+    <p class="card-text">{{ laptop.description }}</p>
+   
+    {% if laptop.file %}
+ <p class="card-file"></p><a href="">{{ laptop.file.url }}</a></p>
+  {% endif %}
+  <p class="card-text">Rs.<small class="fw-light text-decoration-line-through">{{laptop.price}}</small> {{ laptop.discounted_price }}</p>
+  <div class ='row'>
+    <div class = 'col'>
+    <a href="#" class="btn btn-primary">BuyNow </a></div>
+    <div class = 'col'>
+    {% comment %} <form action="/add_to_cart">
+      <input type="hidden" name="pro_id" value="{{laptop.id}}"  id="pro_id">
+      <button type="submit" class="btn btn-primary">cart</button></div>
+    </form> {% endcomment %}
+    <input type="hidden" name="pro_id" value="{{laptop.id}}"  id="pro_id">
+    <a href='/add_to_cart/{{laptop.product_id}}' type="submit"  class="btn btn-primary">cart</a></div></div>
+  </div>
+  <br>
+</div>
+</div>
+{% endfor %}
+</div>
+</form>
+</div> 
+{% comment %} 
+ <script>
+  $(document).ready(function(){
+      $('input[name="pro_id"]').hide()
+    // jQuery methods go here...
+  
+  });
+</script>  {% endcomment %}
+
+{% endblock %}

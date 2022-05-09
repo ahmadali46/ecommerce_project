@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+    
+        <div class="d-flex">
+<a href="{% url 'get' %}">
+<input  type="submit" value="add employee" class="btn btn-dark" /></a>
+</div>
+
+<p class="text-center">If you login other account, <a style="color: black;" href="{% url 'logout' %}">logout</a> and login for other account</p>
+
+
+
+
+
+{%endblock%}

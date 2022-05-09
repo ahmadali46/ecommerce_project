@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="container">
+  <form action="" method="post" novalidate class="shadow p-5">
+    {% csrf_token %} {% for fm in form %}
+
+    <div class="form-group mb-3">
+      {{fm.label_tag}}{{fm}}<small class="text-danger"
+        >{{fm.errors|striptags}}</small
+      >
+    </div>
+    {% endfor %}
+    <input type="submit" value="update" class="btn btn-primary" />
+  </form>
+</div>
+
+{% endblock %}

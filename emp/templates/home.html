@@ -1,0 +1,81 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+{% if request.user.is_authenticated %}
+
+  <div style="text-align: center">
+    <!-- <div  class="container mg-3"> -->
+     <div  class="d-lg-flex justify-content-center" > 
+      <div style="max-width: 18rem">
+        <div class="row">
+          <div class="col">
+  <form action="" method="post" novalidate class="shadow p-5">
+
+    {% csrf_token %}
+ 
+      
+  {% for fm in form %}
+   
+    <div class="form-group mb-3">
+      {{fm.label_tag}}{{fm}}<small class="text-danger"
+        >{{fm.errors|striptags}}</small
+      >
+    </div>
+
+    
+    {% endfor %}
+
+    <input type="submit" value="submit" class="btn btn-primary" />
+    <p class="text-center">If you login other account, <a style="color: black;" href="{% url 'logout' %}">logout</a> and login for other account</p>
+    <p class="text-center">If you want to <a style="color: black;" href="{% url 'password_reset' %}">change password</a>.</p>
+  </form>
+  </div>
+</div>
+</div>
+<!-- emp_employee -->
+<br />
+<div class="container">
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Email</th>
+          <th scope="col">City</th>
+          <th scope="col">Salary</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if get %} {% for emp in get %}
+        <tr>
+          <td>{{counterloop}}</td>
+          <td>{{emp.Firstname}}</td>
+          <td>{{emp.Lastname}}</td>
+          <td>{{emp.Email}}</td>
+          <td>{{emp.City}}</td>
+          <td>{{emp.Salary}}</td>
+          <td>
+            <a href="{% url 'edit' emp.id %}" class="btn btn-warning">Edit</a>
+            <a
+              href="{% url 'delete' emp.pk %}"
+              type="button"
+              value="Delete"
+              class="btn btn-primary"
+              >Delete</a
+            >
+          </td>
+        </tr>
+        {% endfor %} {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<h1>you are not login</h1>
+{% endif %}
+
+
+</div>
+</div>
+{%endblock%}

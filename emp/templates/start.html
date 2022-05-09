@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}      
+
+
+<div style="text-align: center">
+    <div  class="container py-5">
+
+  <div class="btn-group">
+    <a href="{% url 'sellerlogin' %}" class="btn btn-dark;btn btn-outline-dark" aria-current="page">seller login</a>
+    <a href="{% url 'login' %}" class="btn btn-dark;btn btn-outline-dark">login employee</a>
+  </div>
+     
+    </div></div>
+    <br>
+    <br>
+
+    <div style="text-align: center">
+      <div  class="container py-5">
+  
+    <div class="btn-group">
+      <a href="{% url 'sellregister' %}" class="btn btn-dark;btn btn-outline-dark" aria-current="page">seller register</a>
+      <a href="{% url 'register' %}" class="btn btn-dark;btn btn-outline-dark">customer register</a>
+    </div>
+       
+      </div></div>
+
+    {% endblock %}
