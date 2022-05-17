@@ -62,7 +62,7 @@ class MyUser(AbstractBaseUser):
     def __str__(self):
         return self.email
     
-    def has_perm(self,perm,obj=None):
+    def has_perms(self,obj=None):
         return True
     
     def has_module_perms(self,app_label):
@@ -159,5 +159,22 @@ class Wishlist(models.Model):
         unique_together = ['customer','item']
     def __str__(self):
          return str(self.item)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=32, null=False)
+
+    def __str__(self) :
+        return str(self.name)
+    
+
+class RandomList(models.Model):
+    category = models.ForeignKey(Category, related_name="random_list", on_delete=models.CASCADE)
+    name = models.CharField(max_length=32, null=False)
+    description = models.TextField(null=True)
+
+
+    def __str__(self):
+        return str(self.name)
     
 # Create your models here.

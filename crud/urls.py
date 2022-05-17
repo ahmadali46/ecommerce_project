@@ -18,11 +18,13 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import rest_framework
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('emp.urls')),
     path('seller/',include('seller.urls')),
+    path('api-drf/',include("rest_framework.urls")), 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

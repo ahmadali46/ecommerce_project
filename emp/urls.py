@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 from . import views
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
@@ -56,7 +57,11 @@ urlpatterns = [
     
      path('wishlist/',views.Wish,name='Wish'),
 
-     path('add_to_cart/<str:pk>',views.addtocart,name='add_to_cart')
+     path('add_to_cart/<str:pk>',views.addtocart,name='add_to_cart'),
+
+     path("index1/", views.index1, name="index"),
+
+    path("index2/", views.index2, name="index-js"),
      
      # path('deleteproduct/<int:pk>',views.deleteproduct,name='deleteproduct'),
      
@@ -73,7 +78,9 @@ urlpatterns = [
     #path('home/',views.home,name='home'),
         
     ]  + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
-
-
-
 urlpatterns += staticfiles_urlpatterns()
+
+router = DefaultRouter()
+router.register("api/categories", views.CategoryViewSet, basename="categories")
+router.register("api/random_list", views.RandomListViewSet, basename="random_list")
+urlpatterns += router.urls

@@ -27,6 +27,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from crud.settings import LOGIN_REDIRECT_URL
 import time
+from .models import Category, RandomList
+from .serializers import CategorySerializer, RandomListSerializer
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 @login_required(login_url='login')
 def add(request):
@@ -390,6 +394,29 @@ def seller_view(request):
 
 def customer_view(request):
     return render(request, 'customerlogin.html')
+
+
+def index1(request):
+    return render(request, "index1.html")
+
+
+def index2(request):
+    return render(request, "index2.html")
+
+class CategoryViewSet(viewsets.ModelViewSet):
+
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+    filter_backends = [DjangoFilterBackend]
+
+class RandomListViewSet(viewsets.ModelViewSet):
+
+    serializer_class = RandomListSerializer
+    queryset = RandomList.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['category', 'id', "name"]
+    search_fields = ["name"]
+    ordering_fields = '__all__'
 
 
 # class WishCreate(CreateView):
