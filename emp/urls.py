@@ -46,6 +46,8 @@ urlpatterns = [
      path('about/',views.about,name='about'),
      
      path('',views.productview, name = 'product'),
+
+     path('adminview/',views.adminview, name = 'adminview'),
      
      path('editproduct/<slug:ahmad>/',views.editproduct,name='editproduct'),
      
@@ -62,17 +64,12 @@ urlpatterns = [
      path("index1/", views.index1, name="index"),
 
     path("index2/", views.index2, name="index-js"),
-     
-     # path('deleteproduct/<int:pk>',views.deleteproduct,name='deleteproduct'),
-     
-     
-     
 
+    path('aftersearch/',views.aftersearch,name='aftersearch'),
+
+    path('autosuggest/',views.autosuggest,name='autosuggest'),
      
-     
-     
-     
-     
+     # path('deleteproduct/<int:pk>',views.deleteproduct,name='deleteproduct'),  
        
         
     #path('home/',views.home,name='home'),
@@ -83,4 +80,6 @@ urlpatterns += staticfiles_urlpatterns()
 router = DefaultRouter()
 router.register("api/categories", views.CategoryViewSet, basename="categories")
 router.register("api/random_list", views.RandomListViewSet, basename="random_list")
+router.register("api/product", views.ProductViewSet, basename="product")
+
 urlpatterns += router.urls

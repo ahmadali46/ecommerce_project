@@ -33,15 +33,6 @@ admin.site.register(Wishlist)
 
 
 
-
-
-
-# 
-
-
-
-
-
 @admin.register(employee)
 class Admin(admin.ModelAdmin):
      list_display = ['id','Firstname','Lastname','Email','City','Salary']

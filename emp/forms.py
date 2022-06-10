@@ -1,3 +1,4 @@
+from cProfile import label
 from xml.dom.minidom import Attr
 from django import forms
 from . models import *
@@ -9,6 +10,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from emp.models import MyUser
 from django.contrib.auth import get_user_model
+from . import views
 
 
 class UserCreationForm(forms.ModelForm):
@@ -49,7 +51,7 @@ class EmployeeForm(forms.ModelForm):
       fields = ['Firstname','Lastname','Email','City','Salary']
       
 class ProductForm(forms.ModelForm):
-    # email = forms.CharField(max_length=50,label='email',widget=forms.EmailInput(attrs={'class':'form-control'}))
+    # user = forms.CharField(max_length=50,label='EMAIL',widget=forms.EmailField(attrs={'class':'form-control'}))
     title = forms.CharField(max_length=50,label='title',widget=forms.TextInput(attrs={'class': 'form-control'}))
     description = forms.CharField(max_length=50,label='description',widget=forms.TextInput(attrs={'class': 'form-control'}))
     price = forms.IntegerField(max_value=399999,label='price',widget=forms.NumberInput(attrs={'class': 'form-control'}))
@@ -58,8 +60,9 @@ class ProductForm(forms.ModelForm):
     file = forms.FileField(label='file',widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     class Meta:
         model = Product
+        # widgets = {label:'','user': forms.HiddenInput()  }
         fields = ['user','title','description','price','discounted_price','image_upload','file','category']
-        # exclude = ('user',)
+        
      
 class UpdateForm(forms.ModelForm):
      class Meta:

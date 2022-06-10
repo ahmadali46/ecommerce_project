@@ -43,7 +43,28 @@
                 <a class="nav-link" href="{% url 'logout'%}">Logout</a>
               </li>
           </ul>
-          <div class="d-flex">
+ 
+          <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+          <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+          <script>
+            $( function() {
+            
+              $( "#tags" ).autocomplete({
+                source: "{% url 'autosuggest' %}",
+              });
+            } );
+            </script>
+
+          <form class="d-flex">
+            <input class="form-control me-2" id="tags" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+
+          
+          <div class="d-flex" action="{% url 'aftersearch' %}">
           
             <a class="nav-link" href="{% url 'home'%}">start</a>
             <a class="nav-link" href="{% url 'get'%}">get</a>

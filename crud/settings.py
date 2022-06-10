@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'seller',
     'emp',
+    'drf_yasg',
     'crispy_forms',
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
@@ -95,8 +96,14 @@ WSGI_APPLICATION = 'crud.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'admin',
+        'USER': 'postgres',
+        'PASSWORD': 'ahmadali1591',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
         # 'USER' :'user001',
         # 'PASSWORD':'123456789',
         # 'HOST':'localhost',

@@ -2,6 +2,88 @@
 <div  class="container py-5">
 <form action="" method='post'>
     {% csrf_token %}
+    <div class="row">
+      {% for user in users %}
+  <div class="col">
+  <div class="card" style="width: 14rem;">
+    <img class="card-img-top" src="{{user.image_upload.url}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title" >{{ user.title }}</h5>
+  
+      <a href="{% url 'add_to_wishlist' user.pk %}" name="wishlist" class="btn btn-outline-primary" >add to wish</a>
+  
+      <p class="card-text">{{ user.description }}</p>
+      {% if user.file %}
+   <p class="card-file"></p><a href="">{{ user.file.url }}</a></p>
+    {% endif %}
+       <p class="card-text">Rs.<small class="fw-light text-decoration-line-through">{{user.price}}</small> {{ user.discounted_price }}</p>
+       <div class ='row'>
+        <div class = 'col'>
+        <a href="#" class="btn btn-primary">BuyNow </a></div>
+        <div class = 'col'>
+          {% comment %} <form action="/add_to_cart">
+            <input type="hidden" name="pro_id" value="{{moblie.id}}"  id="pro_id">
+            <button type="submit" class="btn btn-primary">cart</button></div>
+          </form> {% endcomment %}
+  
+          <input type="hidden" name="pro_id" value="{{user.id}}"  id="pro_id">
+          <a href='/add_to_cart/{{user.product_id}}' type="submit"  class="btn btn-primary">cart</a></div>
+  </div>
+    </div>
+  </div>
+  <br>
+  </div>
+  {% endfor %}
+  </div>
+  <br>
+  <br>
+  {% comment %} &raquo; &laquo; {% endcomment %}
+
+  {% if users.has_other_pages %}
+  <ul class="pagination">
+    {% if users.has_previous %}
+      <li><a href="?page={{ users.previous_page_number }}">Pre</a>&nbsp;</li>
+    {% else %}
+      <li class="disabled"></li>
+    {% endif %}
+    {% for i in users.paginator.page_range %}
+      {% if users.number == i %}
+        <li class="active"><span>{{ i }}&nbsp; <span class="sr-only"></span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}&nbsp;</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <li>&nbsp;<a href="?page={{ users.next_page_number }}">Next</a></li>
+    {% else %}
+      <li class="disabled"></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="row">
     {% for mobile in mobiles %}
@@ -47,6 +129,7 @@
   <div class="card-body">
     <h5 class="card-title">{{ laptop.title }}</h5>
     <a href="{% url 'add_to_wishlist' laptop.pk %}" name="wishlist" class="btn btn-outline-primary" >add to wish</a>
+   
     <p class="card-text">{{ laptop.description }}</p>
    
     {% if laptop.file %}

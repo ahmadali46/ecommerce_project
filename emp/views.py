@@ -1,5 +1,6 @@
 from atexit import register
 import email
+from enum import auto
 from importlib.metadata import files
 from itertools import product
 from msilib.schema import File
@@ -12,6 +13,7 @@ from django import views
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
+from matplotlib.style import use
 from .models import *
 from . forms import *
 import copy
@@ -28,9 +30,10 @@ from django.contrib.auth.decorators import user_passes_test
 from crud.settings import LOGIN_REDIRECT_URL
 import time
 from .models import Category, RandomList
-from .serializers import CategorySerializer, RandomListSerializer
+from .serializers import CategorySerializer, ProductSerializer, RandomListSerializer
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required(login_url='login')
 def add(request):
@@ -93,6 +96,9 @@ def adminlogin(request):
     if request.method == 'POST':
         email = request.POST.get()
 
+def adminview(request):
+    return render(request,'admin.html')
+
 def loggin(request):
     # user1 = MyUser.objects.filter(id=request.user.id).delete()
     # request.session.save()
@@ -106,6 +112,7 @@ def loggin(request):
     if request.user.is_authenticated:
             return redirect(LOGIN_REDIRECT_URL)
     if request.method == 'POST':
+     
         # user1 = MyUser.objects.all()
         # if user1:
         #     user1.save()
@@ -126,18 +133,21 @@ def loggin(request):
         # user2 =authenticate(password=password,email=email )
         
         if user:
-        
+         
             print("log",user.user_type)
             if user.user_type=='SELLER':
-                print('seller')
-                login(request,user)
-                messages.success(request,f"you are  logged in as seller {email}")
-                return redirect('selladdproduct')
+                if user.option_type == 'accept':
+                    print('seller')
+                    login(request,user)
+                    messages.success(request,f"you are  logged in as seller {email}")
+                    return redirect('selladdproduct')
+                else:
+                    messages.success(request,f"you are not accepted seller")
             if user.user_type=='SUPERADMIN':
                 print("log")
                 login(request,user)
                 messages.success(request,f"you are  logged in as superuser {email}")
-                return redirect('get')
+                return redirect('adminview')
             if user.user_type=='CUSTOMER':
                 login(request,user)
                 messages.success(request,f"you are  logged in as customer {email}")
@@ -166,6 +176,9 @@ def getemployee(request):
     
                     form.save()
                     return redirect("get")
+             else:
+                    messages.success(request,f'fill the complete form')
+                    return redirect("get")
     else:
         get = employee.objects.all()
         form = EmployeeForm()
@@ -183,8 +196,7 @@ def deleteemploye(request, pk):
         return redirect('get')
 
    
-def register(request):
-    
+def register(request): 
     return render(request,'register.html')
 
 @login_required 
@@ -203,9 +215,25 @@ def addtocart(request,pk):
     return render(request,'addtocart.html')
 
 def productview(request):
+    # user_list = Product.objects.all()
+    # paginator = Paginator(user_list,10)
+    # users = paginator.page(1)
+    
+    
+    alls = Product.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(alls,3)
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+    # users = paginator.page(2)
+    # paginators = Paginator(mobiles, 3)
     mobiles = Product.objects.filter(category='mobile')
     laptops = Product.objects.filter(category='laptop')
-    return render(request,'product.html',{'mobiles':mobiles,'laptops':laptops})    
+    return render(request,'product.html',{'mobiles':mobiles,'laptops':laptops,'users':users})    
 
 @login_required(login_url='login')
 def selleraddproductview(request):
@@ -250,7 +278,12 @@ def selleraddproductview(request):
             print('data not saved')
     get = Product.objects.filter(user_id = request.user.id)
     # get = Product.objects.all()
-    form=ProductForm()   
+    form=ProductForm()
+    form = ProductForm( initial={'user':request.user} )
+    form.fields['user'].widget = forms.HiddenInput() 
+    form.fields['user'].label = '' 
+    
+    
     return render(request,'selleraddproduct.html',{"form":form,"get":get})
 
 # def editproduct(request,id):
@@ -337,21 +370,26 @@ def sellregister(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
         contact = request.POST.get('contact')
+        # formss = authenticate(email=email,password=password,contact=contact)
+        # if formss.is_valid():
         if 'seller_button' in request.POST:
-            muser=MyUser.objects.create_user(email=email,password=password,contact=contact)
+            muser=MyUser.objects.create_user(email=email,password=password,contact=contact,confirm_password=confirm_password)
             muser.user_type='SELLER'
-            
-            muser.save()
-            messages.success(request,f'you are register with {email} as a SELLER')
-            return redirect('login')
+            if muser.password and muser.contact:
+                muser.save()
+                messages.success(request,f'you are register with {email} as a SELLER')
+                return redirect('login')
         if 'customer_button' in request.POST:
-            muser =MyUser.objects.create_user(email=email,password=password,contact=contact)
+            muser =MyUser.objects.create_user(email=email,password=password,contact=contact,confirm_password=confirm_password)
             muser.user_type = 'CUSTOMER'
-            
-            muser.save()
-            messages.success(request,f'you are register with {email} as a CUSTOMER')
-            return redirect('login')
+            if muser.password and muser.contact :
+                muser.save()
+                messages.success(request,f'you are register with {email} as a CUSTOMER')
+                return redirect('login')
+        else:
+            messages.success(request,f'enter complete information')
         
     return render(request,'sellregister.html')
 
@@ -395,6 +433,10 @@ def seller_view(request):
 def customer_view(request):
     return render(request, 'customerlogin.html')
 
+def aftersearch(request):
+    pass
+def autosuggest(request):
+    print(request.GET)
 
 def index1(request):
     return render(request, "index1.html")
@@ -417,6 +459,12 @@ class RandomListViewSet(viewsets.ModelViewSet):
     filterset_fields = ['category', 'id', "name"]
     search_fields = ["name"]
     ordering_fields = '__all__'
+
+class ProductViewSet(viewsets.ModelViewSet):
+
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+    filter_backends = [DjangoFilterBackend]
 
 
 # class WishCreate(CreateView):
